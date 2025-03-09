@@ -1,0 +1,66 @@
+package com.example.chatapp.chat.service;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.chatapp.chat.dto.ChatRoomDto;
+import com.example.chatapp.chat.entity.ChatRoom;
+import com.example.chatapp.chat.repository.ChatRoomRepository;
+import com.example.chatapp.user.entity.User;
+import com.example.chatapp.user.repository.UserRepository;
+
+@Service
+public class ChatRoomService {
+
+    private final ChatRoomRepository chatRoomRepository;
+    private final UserRepository userRepository;
+
+    @Autowired
+    public ChatRoomService(ChatRoomRepository chatRoomRepository,
+                           UserRepository userRepository) {
+        this.chatRoomRepository = chatRoomRepository;
+        this.userRepository = userRepository;
+    }
+
+    // 채팅방 생성
+    public ChatRoom createChatRoom(String name, List<Long> userIds, User creator) {
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.setName(name);
+
+        Set<User> users = new HashSet<>(userRepository.findAllById(userIds));
+        users.add(creator); // 채팅방 생성자 추가
+        chatRoom.setUsers(users);
+
+        return chatRoomRepository.save(chatRoom);
+    }
+
+    // 사용자의 채팅방 목록 조회
+    public List<ChatRoomDto> getUserChatRooms(User user) {
+        List<ChatRoom> chatRooms = chatRoomRepository.findByUsersContaining(user);
+        return chatRooms.stream()
+                .map(ChatRoomDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    // 채팅방 정보 조회
+    public ChatRoom getChatRoomById(Long chatRoomId) {
+        return chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(() -> new NoSuchElementException("Chat room not found"));
+    }
+
+    // 채팅방에 사용자 초대
+    public void inviteUser(Long chatRoomId, Long userId) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(() -> new NoSuchElementException("Chat room not found"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        chatRoom.addUser(user);
+
+        chatRoomRepository.save(chatRoom);
+    }
+}
