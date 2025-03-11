@@ -3,6 +3,7 @@ package com.example.chatapp.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,9 @@ import java.util.Date;
 @Component
 public class JwtTokenUtil {
 
-    private String secret = "Z2VtZXJlYXRlX3Rva2VuX2Zvcl9zZWFjdXJlX2dldHRpbmc="; // 256비트 이상으로 설정해야 합니다.
+    @Value("${jwt.secret}")
+    private String secret;
+
     private Key key;
 
     // private long validityInMilliseconds = 3600000; // 1시간
