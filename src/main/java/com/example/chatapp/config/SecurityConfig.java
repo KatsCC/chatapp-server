@@ -38,9 +38,9 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/", "/**").permitAll()
-//                    .requestMatchers("/login", "/registration", "/h2-console/**").permitAll()
-//                    .anyRequest().authenticated().permitAll()
+                               .requestMatchers("/", "/**").permitAll()
+//                    .requestMatchers("/login", "/registration","/user/me" , "/h2-console/**").permitAll()
+//                    .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

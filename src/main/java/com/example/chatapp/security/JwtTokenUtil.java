@@ -21,7 +21,7 @@ public class JwtTokenUtil {
 
     private Key key;
 
-    // private long validityInMilliseconds = 3600000; // 1시간
+     private long validityInMilliseconds = 360000000 * 5000;
 
     @PostConstruct
     public void init() {
@@ -33,12 +33,12 @@ public class JwtTokenUtil {
         claims.put("auth", "ROLE_USER");
 
         Date now = new Date();
-        // Date validity = new Date(now.getTime() + validityInMilliseconds);
+        Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                // .setExpiration(validity)
+                .setExpiration(validity)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
