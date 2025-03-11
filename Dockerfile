@@ -1,8 +1,10 @@
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jdk AS build
 
 WORKDIR /app
+COPY . .
+RUN ./gradlew build -x test
 
-COPY build/libs/chatapp-0.0.1-SNAPSHOT.jar app.jar
-
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY --from=build /app/build/libs/*.jar app.jar
 CMD ["java", "-jar", "app.jar"]
-
