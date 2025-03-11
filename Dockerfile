@@ -1,6 +1,16 @@
-FROM gradle:8.2.1-jdk21 AS builder
-WORKDIR /home/gradle/project
-COPY --chown=gradle:gradle . .
+FROM openjdk:21-jdk-alpine AS builder
+WORKDIR /app
+
+RUN apk add --no-cache wget unzip
+
+RUN wget https://services.gradle.org/distributions/gradle-8.2.1-bin.zip && \
+    unzip gradle-8.2.1-bin.zip -d /opt/gradle && \
+    rm gradle-8.2.1-bin.zip
+
+ENV GRADLE_HOME=/opt/gradle/gradle-8.2.1
+ENV PATH="/opt/gradle/gradle-8.2.1/bin:"/opt/gradle/gradle-8.2.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+COPY . .
 RUN gradle clean build --no-daemon
 
 FROM eclipse-temurin:21-jdk-alpine
