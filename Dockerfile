@@ -2,6 +2,9 @@ FROM eclipse-temurin:21-jdk AS build
 
 WORKDIR /app
 COPY . .
+
+RUN chmod +x gradlew && ./gradlew build -x test
+
 RUN ./gradlew build -x test
 
 FROM eclipse-temurin:21-jre
