@@ -4,6 +4,7 @@ import com.example.chatapp.friend.entity.FriendRequest;
 import com.example.chatapp.friend.entity.FriendRequest.FriendRequestStatus;
 import com.example.chatapp.friend.repository.FriendRequestRepository;
 import com.example.chatapp.user.dto.UserDto;
+import com.example.chatapp.user.dto.UserProfileDto;
 import com.example.chatapp.user.entity.User;
 import com.example.chatapp.user.repository.UserRepository;
 
@@ -60,6 +61,7 @@ public class UserService implements UserDetailsService {
     }
 
     // 친구 요청 보내기
+    @Transactional
     public void sendFriendRequest(User sender, User recipient) {
         // 이미 친구인지 확인
         if (sender.getFriends().contains(recipient)) {
@@ -133,6 +135,12 @@ public class UserService implements UserDetailsService {
         }
         System.out.println("Number of friends: " + user.getFriends().size());
         return user;
+    }
+
+    @Transactional
+    public UserProfileDto getUserProfile(String email) {
+        User user = findByEmailWithFriends(email);
+        return new UserProfileDto(user.getId(), user.getUsername(), user.getEmail(), user.getMention());
     }
 
     // UserDetailsService의 메서드 구현

@@ -46,7 +46,7 @@ public class FriendController {
     public ResponseEntity<?> sendFriendRequest(@RequestBody Map<String, Long> request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        User sender = userService.findByEmail(email);
+        User sender = userService.findByEmailWithFriends(email);
 
         Long recipientId = request.get("recipientId");
         if (recipientId == null) {
