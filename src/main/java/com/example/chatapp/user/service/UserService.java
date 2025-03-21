@@ -135,6 +135,7 @@ public class UserService implements UserDetailsService {
 
     // UserDetailsService의 메서드 구현
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = findByEmailWithFriends(email);
     
