@@ -34,7 +34,7 @@ public class UserProfileController {
         }
 
         String email = authentication.getName();
-        User user = userService.findByEmail(email);
+        User user = userService.findByEmailWithFriends(email);
 
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
