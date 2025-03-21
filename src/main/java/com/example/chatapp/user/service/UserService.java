@@ -125,19 +125,19 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
-    public User findByEmailWithFriends(String email) {
-        User user = userRepository.findByEmailWithFriends(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found with email: " + email);
-        }
-        return user;
-    }
+//    public User findByEmailWithFriends(String email) {
+//        User user = userRepository.findByEmailWithFriends(email);
+//        if (user == null) {
+//            throw new UsernameNotFoundException("User not found with email: " + email);
+//        }
+//        return user;
+//    }
 
     // UserDetailsService의 메서드 구현
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = findByEmailWithFriends(email);
+        User user = userRepository.findByEmailWithFriends(email);
     
         if (user == null) {
             throw new UsernameNotFoundException("User not found with email: " + email);
