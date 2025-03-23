@@ -114,6 +114,7 @@ public class UserService implements UserDetailsService {
         return friendRequestRepository.findByRecipientAndStatus(user, FriendRequestStatus.PENDING);
     }
 
+    @Transactional
     public Optional<FriendRequest> findFriendRequestById(Long requestId) {
         return friendRequestRepository.findById(requestId);
     }
