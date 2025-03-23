@@ -10,6 +10,7 @@ import com.example.chatapp.user.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -116,7 +117,12 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public Optional<FriendRequest> findFriendRequestByIdWithUsers(Long requestId) {
-        return friendRequestRepository.findByIdWithUsers(requestId);
+        Optional<FriendRequest> optionalRequest = friendRequestRepository.findByIdWithUsers(requestId);
+        optionalRequest.ifPresent(fr -> {
+            Hibernate.initialize(fr.getRecipient());
+            Hibernate.initialize(fr.getSender());
+        });
+        return optionalRequest;
     }
 
 
