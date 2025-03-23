@@ -116,7 +116,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public Optional<FriendRequest> findFriendRequestById(Long requestId) {
-        return friendRequestRepository.findById(requestId);
+        return friendRequestRepository.findByIdWithUsers(requestId);
     }
     
     // 사용자 ID로 사용자 찾기
