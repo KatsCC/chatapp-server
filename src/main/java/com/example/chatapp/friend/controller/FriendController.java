@@ -93,7 +93,7 @@ public class FriendController {
         String email = authentication.getName();
         User recipient = userService.findByEmailWithFriends(email);
 
-        Optional<FriendRequest> optionalRequest = userService.findFriendRequestById(requestId);
+        Optional<FriendRequest> optionalRequest = userService.findFriendRequestByIdWithUsers(requestId);
         if (!optionalRequest.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Friend request not found");
         }
@@ -109,6 +109,7 @@ public class FriendController {
 
         return ResponseEntity.ok("Friend request accepted");
     }
+
 
     // 친구 목록 가져오기
     @GetMapping("/list")
