@@ -91,7 +91,7 @@ public class FriendController {
     public ResponseEntity<?> acceptFriendRequest(@PathVariable Long requestId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        User recipient = userService.findByEmail(email);
+        User recipient = userService.findByEmailWithFriends(email);
 
         Optional<FriendRequest> optionalRequest = userService.findFriendRequestById(requestId);
         if (!optionalRequest.isPresent()) {
@@ -115,7 +115,7 @@ public class FriendController {
     public ResponseEntity<?> getFriends() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        User user = userService.findByEmail(email);
+        User user = userService.findByEmailWithFriends(email);
 
         List<User> friends = userService.getFriends(user);
 
