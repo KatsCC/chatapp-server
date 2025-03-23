@@ -3,6 +3,7 @@ package com.example.chatapp.friend.controller;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
@@ -87,6 +88,7 @@ public class FriendController {
     }
 
     // 친구 요청 수락
+    @Transactional
     @PostMapping("/requests/{requestId}/accept")
     public ResponseEntity<?> acceptFriendRequest(@PathVariable Long requestId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
