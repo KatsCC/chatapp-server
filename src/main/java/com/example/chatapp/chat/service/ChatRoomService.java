@@ -11,6 +11,8 @@ import com.example.chatapp.chat.entity.ChatRoom;
 import com.example.chatapp.chat.repository.ChatRoomRepository;
 import com.example.chatapp.user.entity.User;
 import com.example.chatapp.user.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 public class ChatRoomService {
@@ -38,6 +40,7 @@ public class ChatRoomService {
     }
 
     // 사용자의 채팅방 목록 조회
+    @Transactional
     public List<ChatRoomDto> getUserChatRooms(User user) {
         List<ChatRoom> chatRooms = chatRoomRepository.findByUsersContaining(user);
         return chatRooms.stream()
