@@ -39,7 +39,7 @@ public class User {
     // 추가로 권한을 위해 roles 필드를 추가할 수 있습니다.
     private String roles;
 
-    private String mention = "not mention";
+    private String mention = "no mention";
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
