@@ -42,7 +42,7 @@ public class ChatRoomService {
     // 사용자의 채팅방 목록 조회
     @Transactional
     public List<ChatRoomDto> getUserChatRooms(User user) {
-        List<ChatRoom> chatRooms = chatRoomRepository.findByUsersContaining(user);
+        List<ChatRoom> chatRooms = chatRoomRepository.findChatRoomsByUserId(user.getId());
         return chatRooms.stream()
                 .map(ChatRoomDto::fromEntity)
                 .collect(Collectors.toList());
