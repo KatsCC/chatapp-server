@@ -13,6 +13,8 @@ import com.example.chatapp.chat.service.ChatMessageService;
 import com.example.chatapp.user.entity.User;
 import com.example.chatapp.user.service.UserService;
 
+import java.security.Principal;
+
 @Controller
 public class ChatWebSocketController {
 
@@ -30,10 +32,12 @@ public class ChatWebSocketController {
     }
 
     @MessageMapping("/chat/rooms/{chatRoomId}/message")
-    public void sendMessage(@DestinationVariable Long chatRoomId, @Payload String content) {
+    public void sendMessage(@DestinationVariable Long chatRoomId,
+                            @Payload String content,
+                            Principal principal) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+        // principal을 통해 사용자 정보를 얻습니다.
+        String email = principal.getName();
         User sender = userService.findByEmail(email);
 
         ChatMessage message = chatMessageService.saveMessage(chatRoomId, sender, content);
