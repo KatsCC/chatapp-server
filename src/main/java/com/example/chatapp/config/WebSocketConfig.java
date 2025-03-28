@@ -26,6 +26,13 @@ import com.example.chatapp.user.service.UserService;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+    private final WebSocketAuthenticationInterceptor webSocketAuthInterceptor;
+
+    @Autowired
+    public WebSocketConfig(WebSocketAuthenticationInterceptor webSocketAuthInterceptor) {
+        this.webSocketAuthInterceptor = webSocketAuthInterceptor;
+    }
+
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
@@ -46,6 +53,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 //        registry.addEndpoint("/ws").setAllowedOrigins("*").withSockJS();
         registry.addEndpoint("/ws")
                 .setAllowedOrigins("https://chatapp-server-g6an.onrender.com")
+                .addInterceptors(webSocketAuthInterceptor)
                 .withSockJS();
     }
 
