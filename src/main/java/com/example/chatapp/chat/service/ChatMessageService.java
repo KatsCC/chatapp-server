@@ -15,6 +15,7 @@ import com.example.chatapp.chat.repository.ChatRoomRepository;
 import com.example.chatapp.user.entity.User;
 import com.example.chatapp.user.repository.UserRepository;
 import com.example.chatapp.user.service.PushNotificationService;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ChatMessageService {
@@ -33,8 +34,9 @@ public class ChatMessageService {
         this.pushNotificationService = pushNotificationService;
     }
 
+    @Transactional
     public ChatMessage saveMessage(Long chatRoomId, User sender, String content) {
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+        ChatRoom chatRoom = chatRoomRepository.findChatRoomWithUsers(chatRoomId)
                 .orElseThrow(() -> new NoSuchElementException("Chat room not found"));
         
         if (!chatRoom.getUsers().contains(sender)) {
