@@ -30,14 +30,14 @@ public class WebSocketAuthenticationInterceptor implements HandshakeInterceptor 
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                    WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
-        // 우선 Authorization 헤더에서 JWT 토큰 추출 시도
         String token = null;
+        // 먼저 Authorization 헤더에서 토큰 추출 시도
         String authHeader = request.getHeaders().getFirst("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
         }
 
-        // 만약 헤더에서 토큰이 없다면, 쿼리 파라미터에서 "token" 파라미터를 추출
+        // 헤더에서 토큰이 없으면 URL의 쿼리 파라미터 "token"을 확인
         if (token == null) {
             URI uri = request.getURI();
             Map<String, List<String>> queryParams = UriComponentsBuilder.fromUri(uri).build().getQueryParams();
@@ -47,7 +47,6 @@ public class WebSocketAuthenticationInterceptor implements HandshakeInterceptor 
             }
         }
 
-        // 토큰이 존재하면, JWT 검증을 수행합니다.
         if (token != null) {
             try {
                 String username = jwtTokenUtil.getUsername(token);
@@ -60,7 +59,6 @@ public class WebSocketAuthenticationInterceptor implements HandshakeInterceptor 
                 System.err.println("Invalid JWT token: " + e.getMessage());
             }
         }
-
         return true;
     }
 
