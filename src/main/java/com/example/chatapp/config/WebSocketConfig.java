@@ -22,6 +22,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import com.example.chatapp.security.JwtTokenUtil;
 import com.example.chatapp.user.service.UserService;
 
+import java.util.List;
+import java.util.Map;
+
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
@@ -70,17 +73,27 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 StompHeaderAccessor accessor =
                         MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
-                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    String token = accessor.getFirstNativeHeader("Authorization");
-                    if (token != null && token.startsWith("Bearer ")) {
-                        token = token.substring(7);
-                        String email = jwtTokenUtil.getUsername(token);
-                        if (email != null) {
-                            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-                            if (jwtTokenUtil.validateToken(token, userDetails)) {
-                                Authentication authentication = new UsernamePasswordAuthenticationToken(
-                                        userDetails, null, userDetails.getAuthorities());
-                                accessor.setUser(authentication);
+                if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
+                    Object rawHeaders = accessor.getHeader("nativeHeaders");
+
+                    if (rawHeaders instanceof Map<?, ?> headers) {
+                        Object authHeader = headers.get("Authorization");
+
+                        if (authHeader instanceof List<?> authHeaderList && !authHeaderList.isEmpty()) {
+                            String token = authHeaderList.get(0).toString();
+
+                            if (token.startsWith("Bearer ")) {
+                                token = token.substring(7);
+                                String email = jwtTokenUtil.getUsername(token);
+
+                                if (email != null) {
+                                    UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                                    if (jwtTokenUtil.validateToken(token, userDetails)) {
+                                        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                                                userDetails, null, userDetails.getAuthorities());
+                                        accessor.setUser(authentication);
+                                    }
+                                }
                             }
                         }
                     }
@@ -89,4 +102,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             }
         };
     }
+
 }
