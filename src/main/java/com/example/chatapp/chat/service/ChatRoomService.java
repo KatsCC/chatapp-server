@@ -49,6 +49,7 @@ public class ChatRoomService {
     }
 
     // 채팅방 정보 조회
+    @Transactional(readOnly = true)
     public ChatRoom getChatRoomById(Long chatRoomId) {
         return chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(() -> new NoSuchElementException("Chat room not found"));
