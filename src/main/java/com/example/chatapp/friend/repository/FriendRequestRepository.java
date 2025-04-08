@@ -15,7 +15,6 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
     List<FriendRequest> findByRecipientAndStatus(User recipient, FriendRequestStatus status);
     List<FriendRequest> findBySenderAndStatus(User sender, FriendRequestStatus status);
 
-    // 특정한 친구 요청을 찾기 위한 메서드
     FriendRequest findBySenderAndRecipient(User sender, User recipient);
 
     @Query("select fr from FriendRequest fr join fetch fr.recipient join fetch fr.sender where fr.id = :id")

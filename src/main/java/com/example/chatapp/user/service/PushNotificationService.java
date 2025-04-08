@@ -21,7 +21,6 @@ public class PushNotificationService {
         payload.put("to", expoPushToken);
         payload.put("title", title);
         payload.put("body", body);
-        // 추가 옵션: sound, data 등 필요 시 추가
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

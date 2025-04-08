@@ -102,7 +102,6 @@ public class FriendController {
 
         FriendRequest friendRequest = optionalRequest.get();
 
-        // 친구 요청의 수신자가 현재 사용자와 동일한지 확인
         if (!friendRequest.getRecipient().equals(recipient)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to accept this request");
         }

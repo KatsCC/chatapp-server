@@ -36,7 +36,6 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    // 추가로 권한을 위해 roles 필드를 추가할 수 있습니다.
     private String roles;
 
     private String mention = "no mention";
@@ -50,11 +49,9 @@ public class User {
     @JsonIgnore
     private Set<User> friends = new HashSet<>();
 
-    // 채팅방 참여 목록
     @ManyToMany(mappedBy = "users")
     private Set<ChatRoom> chatRooms = new HashSet<>();
 
-    // 친구 요청을 관리하기 위한 필드 (필요 시)
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<FriendRequest> receivedRequests = new HashSet<>();
 

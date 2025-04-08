@@ -29,8 +29,7 @@ public class ChatRoom {
         inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<User> users = new HashSet<>();
-
-    // 연관 관계 편의 메서드
+    
     public void addUser(User user) {
         this.users.add(user);
         user.getChatRooms().add(this);

@@ -25,6 +25,7 @@ public class UserProfileController {
         this.userService = userService;
     }
 
+    // 회원 정보 확인
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUserProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -45,6 +46,7 @@ public class UserProfileController {
         return ResponseEntity.ok(userProfile);
     }
 
+    // 멘션 수정
     @PutMapping("/me/mention")
     public ResponseEntity<?> updateMention(@RequestBody Map<String, String> request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -71,10 +73,9 @@ public class UserProfileController {
         return ResponseEntity.ok("Mention updated successfully");
     }
 
+    // push-token 등록
     @PostMapping("/push-token")
     public ResponseEntity<?> registerPushToken(@RequestBody PushTokenRequestDto request) {
-        // 인증된 사용자이면 SecurityContext에서 처리할 수도 있고,
-        // 여기서는 request로 email을 전달 받아 처리
         userService.registerPushToken(request.getEmail(), request.getExpoPushToken());
         return ResponseEntity.ok("Push token registered successfully");
     }

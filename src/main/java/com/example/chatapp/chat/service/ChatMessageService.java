@@ -50,7 +50,7 @@ public class ChatMessageService {
         
         ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
         
-        // 푸시 알림 전송: 채팅방의 발신자 외의 모든 참여자에게 푸시 알림을 보냅니다.
+        // 푸시 알림 전송
         chatRoom.getUsers().stream()
             .filter(user -> !user.getId().equals(sender.getId()))
             .forEach(user -> {
@@ -67,7 +67,6 @@ public class ChatMessageService {
         return savedMessage;
     }
 
-    // 최신 메시지 불러오기
     public List<ChatMessageDto> getRecentMessages(Long chatRoomId, Long lastMessageId) {
         List<ChatMessage> messages;
         if (lastMessageId == null) {
@@ -79,8 +78,7 @@ public class ChatMessageService {
                 .map(ChatMessageDto::fromEntity)
                 .collect(Collectors.toList());
     }
-
-    // 이전 메시지 불러오기
+    
     public List<ChatMessageDto> getPreviousMessages(Long chatRoomId, Long firstMessageId) {
         List<ChatMessage> messages = chatMessageRepository.findTop30ByChatRoomIdAndIdLessThanOrderByIdDesc(chatRoomId, firstMessageId);
         return messages.stream()

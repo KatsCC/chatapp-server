@@ -52,8 +52,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        // WebSocket 연결 엔드포인트
-//        registry.addEndpoint("/ws").setAllowedOrigins("*").withSockJS();
+
         registry.addEndpoint("/ws")
                 .setAllowedOrigins("https://chatapp-server-g6an.onrender.com")
                 .addInterceptors(webSocketAuthInterceptor)

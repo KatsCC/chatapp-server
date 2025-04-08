@@ -27,7 +27,6 @@ public class ChatRoomService {
         this.userRepository = userRepository;
     }
 
-    // 채팅방 생성
     public ChatRoom createChatRoom(String name, List<Long> userIds, User creator) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.setName(name);
@@ -39,7 +38,6 @@ public class ChatRoomService {
         return chatRoomRepository.save(chatRoom);
     }
 
-    // 사용자의 채팅방 목록 조회
     @Transactional
     public List<ChatRoomDto> getUserChatRooms(User user) {
         List<ChatRoom> chatRooms = chatRoomRepository.findChatRoomsByUserId(user.getId());
@@ -48,14 +46,12 @@ public class ChatRoomService {
                 .collect(Collectors.toList());
     }
 
-    // 채팅방 정보 조회
     @Transactional(readOnly = true)
     public ChatRoom getChatRoomById(Long chatRoomId) {
         return chatRoomRepository.findChatRoomWithUsers(chatRoomId)
                 .orElseThrow(() -> new NoSuchElementException("Chat room not found"));
     }
-
-    // 채팅방에 사용자 초대
+    
     public void inviteUser(Long chatRoomId, Long userId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(() -> new NoSuchElementException("Chat room not found"));

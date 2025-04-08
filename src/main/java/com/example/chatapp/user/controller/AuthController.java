@@ -28,6 +28,7 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    // 로그인
     @PostMapping("/login")
     public String createAuthenticationToken(@RequestBody UserDto userDto) throws Exception {
         try {
@@ -46,6 +47,7 @@ public class AuthController {
         return jwt;
     }
 
+    // 회원가입
     @PostMapping("/registration")
     public String registerUser(@RequestBody UserDto userDto) {
         User existingUser = userService.findByEmail(userDto.getEmail());

@@ -36,7 +36,6 @@ public class ChatWebSocketController {
                             @Payload String content,
                             Principal principal) {
 
-        // principal을 통해 사용자 정보를 얻습니다.
         String email = principal.getName();
         User sender = userService.findByEmail(email);
 

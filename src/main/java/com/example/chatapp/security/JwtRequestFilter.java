@@ -57,7 +57,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (JwtException | IllegalArgumentException e) {
-                // JWT 토큰이 유효하지 않음
                 logger.error("Invalid JWT token");
             }
         }

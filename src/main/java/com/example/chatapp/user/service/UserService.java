@@ -61,15 +61,13 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmailContainingIgnoreCase(email);
     }
 
-    // 친구 요청 보내기
     @Transactional
     public void sendFriendRequest(User sender, User recipient) {
-        // 이미 친구인지 확인
+
         if (sender.getFriends().contains(recipient)) {
             throw new IllegalStateException("Already friends with this user.");
         }
 
-        // 이미 요청이 존재하는지 확인
         FriendRequest existingRequest = friendRequestRepository.findBySenderAndRecipient(sender, recipient);
         if (existingRequest != null) {
             throw new IllegalStateException("Friend request already sent.");
@@ -83,14 +81,12 @@ public class UserService implements UserDetailsService {
         friendRequestRepository.save(friendRequest);
     }
 
-    // 친구 요청 수락
     @Transactional
     public void acceptFriendRequest(FriendRequest friendRequest) {
 
         System.out.println("Accepting friend request: " + friendRequest.getId());
         friendRequest.setStatus(FriendRequestStatus.ACCEPTED);
 
-        // 양방향 친구 관계 설정
         User sender = friendRequest.getSender();
         User recipient = friendRequest.getRecipient();
 
@@ -105,12 +101,10 @@ public class UserService implements UserDetailsService {
         friendRequestRepository.save(friendRequest);
     }
 
-    // 친구 목록 가져오기
     public List<User> getFriends(User user) {
         return new ArrayList<>(user.getFriends());
     }
 
-    // 받은 친구 요청 목록 가져오기
     public List<FriendRequest> getReceivedFriendRequests(User user) {
         return friendRequestRepository.findByRecipientAndStatus(user, FriendRequestStatus.PENDING);
     }
@@ -126,7 +120,6 @@ public class UserService implements UserDetailsService {
     }
 
 
-    // 사용자 ID로 사용자 찾기
     public User findById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
@@ -151,7 +144,6 @@ public class UserService implements UserDetailsService {
         return new UserProfileDto(user.getId(), user.getUsername(), user.getEmail(), user.getMention());
     }
 
-    // UserDetailsService의 메서드 구현
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -168,7 +160,6 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    //Push토큰 등록
     public void registerPushToken(String email, String expoPushToken) {
         User user = userRepository.findByEmail(email);
         if (user != null) {
