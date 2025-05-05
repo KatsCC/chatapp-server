@@ -31,13 +31,12 @@ public class WebSocketAuthenticationInterceptor implements HandshakeInterceptor 
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                    WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
         String token = null;
-        // 먼저 Authorization 헤더에서 토큰 추출 시도
+
         String authHeader = request.getHeaders().getFirst("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
         }
 
-        // 헤더에서 토큰이 없으면 URL의 쿼리 파라미터 "token"을 확인
         if (token == null) {
             URI uri = request.getURI();
             Map<String, List<String>> queryParams = UriComponentsBuilder.fromUri(uri).build().getQueryParams();
@@ -65,6 +64,5 @@ public class WebSocketAuthenticationInterceptor implements HandshakeInterceptor 
     @Override
     public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                WebSocketHandler wsHandler, Exception exception) {
-        // 후처리 (필요한 경우 구현)
     }
 }

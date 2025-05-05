@@ -1,17 +1,16 @@
 package com.example.chatapp.chat.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.*;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-
 import com.example.chatapp.chat.dto.ChatMessageDto;
 import com.example.chatapp.chat.entity.ChatMessage;
 import com.example.chatapp.chat.service.ChatMessageService;
 import com.example.chatapp.user.entity.User;
 import com.example.chatapp.user.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
 
@@ -21,6 +20,8 @@ public class ChatWebSocketController {
     private final SimpMessageSendingOperations messagingTemplate;
     private final ChatMessageService chatMessageService;
     private final UserService userService;
+
+
 
     @Autowired
     public ChatWebSocketController(SimpMessageSendingOperations messagingTemplate,

@@ -1,17 +1,19 @@
 package com.example.chatapp.chat.service;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.chatapp.chat.dto.ChatRoomDto;
 import com.example.chatapp.chat.entity.ChatRoom;
 import com.example.chatapp.chat.repository.ChatRoomRepository;
 import com.example.chatapp.user.entity.User;
 import com.example.chatapp.user.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -32,7 +34,7 @@ public class ChatRoomService {
         chatRoom.setName(name);
 
         Set<User> users = new HashSet<>(userRepository.findAllById(userIds));
-        users.add(creator); // 채팅방 생성자 추가
+        users.add(creator);
         chatRoom.setUsers(users);
 
         return chatRoomRepository.save(chatRoom);

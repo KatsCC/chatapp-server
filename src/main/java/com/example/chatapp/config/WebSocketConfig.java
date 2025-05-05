@@ -1,5 +1,7 @@
 package com.example.chatapp.config;
 
+import com.example.chatapp.security.JwtTokenUtil;
+import com.example.chatapp.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,16 +13,12 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
-
-import com.example.chatapp.security.JwtTokenUtil;
-import com.example.chatapp.user.service.UserService;
 
 import java.util.List;
 import java.util.Map;
@@ -30,23 +28,19 @@ import java.util.Map;
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final WebSocketAuthenticationInterceptor webSocketAuthInterceptor;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private UserService userDetailsService;
 
     @Autowired
     public WebSocketConfig(WebSocketAuthenticationInterceptor webSocketAuthInterceptor) {
         this.webSocketAuthInterceptor = webSocketAuthInterceptor;
     }
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    private UserService userDetailsService;
-
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        // 클라이언트에게 메시지를 전달할 때의 prefix
         config.enableSimpleBroker("/topic");
-        // 서버에 메시지를 보낼 때의 prefix
         config.setApplicationDestinationPrefixes("/app");
     }
 
